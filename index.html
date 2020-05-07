@@ -1,0 +1,2796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Morris tester</title>
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.4.3/morris.css">
+   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.4.3/morris.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+   <script src="tablecatcher.min.js"></script>
+   <style>
+      #morris-overview {
+         width: 100%;
+         border: none;
+         border-bottom: 1px solid #f9bf09;
+         border-spacing: 0;
+         border-collapse: collapse;
+         margin-bottom: 20px;
+      }
+      #morris-overview th {
+          background-color: #f9bf09;
+          color: black;
+          font-weight: bolder;
+          padding: 4px;
+          text-align: center;
+          font-family: Arial, Helvetica, sans-serif;
+         height: 42px;
+      }
+      #morris-overview td {
+          background-color: #fee600;
+          padding: 4px;
+          text-align: center;
+          height: 56px;
+          font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .morris-chart {
+         height: 250px;
+      }
+
+      .morris-trend {
+         width: 39px;
+         height: 39px;
+         display: inline-block;
+      }
+      .morris-trend-down {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AERCxwcaucEjQAAAehJREFUWMPt2M+LTWEcx/HXnRnjoqQZI/IrIqWQQjGamqaUrVgoWShslGLlD7CzYmejxE7J0kIaWz8WLNgo2SFslKbGfCzmLMbMvdPMvefOPWq+3815np5O7z6f53yf831YjuX4nyNNnisEeFAMVVW9h+JCNdWL1+JNFVUbEO/FH3GsXfV6SsZbj7Wo4ZLoVasO3AbUC7gR7G7nZWXDbcWq4nkHTohaq9aWDbcF/TPG51Bv1dqeEj+GFYVavTNmD+NkFWxdWdg6O650/9iKIfFKGuZYK2WlHOWm91Qdg01WXJ2xrivqjYjfTZT7Kg50fs+lgT1Rw6ZCvUYxiFOLtbW2YKDanLl12IN92I8x7J3nLe+KNd86Y29sFufFPfFWfBcTTaxslGfLAukTa8SouCleLgKiWY6XBXdZ/CgBaHYOt/e3Mn0eDohhcWOe+tVKPimnD5ge94h+cVo8FVNtwk2IQ2VW/5nj4+KR+CImW4CbErc7XXR3Fpa/aAHwo9jeqXP033oXY+L+PCfE7JwUF4vivWS96jZxS3xeAOAzsbobDXVdXBfPxc95AI90s+vvL4r4HfGpAdzjpe9v5+7LPrFRXBMfZgHuqs4dyvT4jBgXv8SDql5djIq74mhVb6Pqxd9Oj+VYji7HXxLWzJ8MTMoAAAAAAElFTkSuQmCC);
+
+      }
+      .morris-trend-up {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AERCx0JHiHRJwAAAg5JREFUWMPt2L1rFFEUBfDfmI2CIBgVtdQQiZKgFgqCKGKhoIWCWAk29lYW4j+R0lYRBMU+amFhoYhaRCJYSSRVEBI0fiRBci32Keuwm2w2484Ue+DAvjfLcOa8++6799FDDz1UD1FVQcGmZs83lKyvPziOPc0e1rrlUPbveCeO4QqWcL30OAqOBGPB++BnsBzs6mrMNRF1PngWLCRBkTjW9c0QbAlGglvBxwYxjVwIhrvp0N7gWjAezLUQ9Ye3g77oglOng7vBTHIkVuF8cOa/uBTU0tJdDV62ISbPJ9FGpqi1mwKy+ngHRnERF1rlpzZwP+NXPsV06tRQcCN4lZYk1sGJWGvyj+ZzJ4KHwdeof2kUwMsdpY9gINifXHpTkJhGTsUaVjJv71YM4jDm8A6zBW7sm1ldZFvIcs5laa4fG7EZA2kTDONQ+j2U/rMWTOEkptu1rpZTGikcFhPnMYMPuY8YxAEcTWJPYfsqIX0nY7rrBWFweJVYmwsOllU0ZsG3FcQ9KruqHV9B3Ggn6aPISvhti/mnGZMdnwYFOXe2hWsjpTcwwWAwmxP2OOp9Qumd1LbgeYOwxeDcet5ZZMz9wKeG8SReV0JcxgImUngt40HG5yo1yZeC78GXqB9/69oIRfetk+nYu5exVGr6aOLc7uBF1IuFyt191IJ9USHD/hYFDRczfZW+ygo9lIff5Uqi/1UX15UAAAAASUVORK5CYII=);
+      }
+      .morris-trend-equal {
+         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDNBOEVFQjEzMDlBMTFFQTgyMzA4MkFBRkJFNkM4NzgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDNBOEVFQjIzMDlBMTFFQTgyMzA4MkFBRkJFNkM4NzgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNjRERUFDMjMwOTUxMUVBODIzMDgyQUFGQkU2Qzg3OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpEM0E4RUVCMDMwOUExMUVBODIzMDgyQUFGQkU2Qzg3OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuVdHwgAAAIqSURBVHja7JhNSFRRFMdn1JAsTLFa2K6Fi3KjKxcyZsQELfwAF9EmQfADrfEDUdsIolQQFJE7o4WoFBahBQr5wYAguBBcTNAiiBA/QFDBDzQdfxfOg8swTDPP92ZGeQd+3PfevYv/O/ecc8977mAw6EpWS3ElsTniHHGOuLMiLi3SpN/vV+JLIQArdonweDymPFcLH6EJPsBlyE8Kz2HrkAPP5F6JK4G7UA598oLHiRD3BfqhUe6rZJyGa3L9DtQZuJ2IhFBb+jbkmSGsF17AFFyFh/H0nGE+GZ+GmauXcRIK5XoG1uJZSnxhPKibIWwE2mAUMqHIbs9F40Hd2mW8KAl0DyqgM5YESjPxQr4oxBn2QMYfcEmun0NGNHXT7AnxK8b1hrAOeAOzcAPqrPacMi8saFkbi1Vr5SgPsuCllZ77A12nTMY8rRxZuq3FcP+U4ubhJ1Rava3fpUzEajswDofQAI/hm1Xi3HDbhDDloSvQDQNQIEIHrE6IVnnzC/9ZdwQTsk55qQaGZG5RxgOrxN2EZimmkYQtw2fYgB6Jzd+SkXt2nBC58CpS8KreVLZbNQpzcF07c11mupZoxKWLx7xh5jZhDPbhCTwSYUYvaGtXcgdaoCzk+ZIEuGpCh+GWxM9gPFumQk3YgZSQVDl2VIB/krmAlgRxE/deuuCvclCruFNfI6vwGv4l8htiS7b2L2Rrga9s1+4PHLfzC8wR54hzxJ1zcScCDABA8GdRmK+hQwAAAABJRU5ErkJggg==);
+      }
+
+      .tablepress, .tablepressx {
+         display:none
+      }
+   </style>
+</head>
+
+<body>
+<table id="morris-overview">
+   <tr>
+      <th>Sorte</th>
+      <th>Preis Vorwoche</th>
+      <th>Preis Vortag</th>
+      <th>Aktuell</th>
+      <th>Tendenz</th>
+   </tr>
+   <tr>
+      <td><span id="variety_a"></span></td>
+      <td><span id="avg_preweek_a"></span></td>
+      <td><span id="price_preday_a"></span></td>
+      <td><span id="price_today_a"></span></td>
+      <td><span id="trend_a"></span></td>
+   </tr>
+   <tr>
+      <td><span id="variety_b"></span></td>
+      <td><span id="avg_preweek_b"></span></td>
+      <td><span id="price_preday_b"></span></td>
+      <td><span id="price_today_b"></span></td>
+      <td><span id="trend_b"></span></td>
+   </tr>
+</table>
+Letzte Woche
+<div id="morris-week" class="morris-chart"></div>
+Letzter Monat
+<div id="morris-month" class="morris-chart"></div>
+Letztes Jahr
+<div id="morris-year" class="morris-chart"></div>
+<!-- test tables, delete x from class tablepress and set to another-->
+<table id="tablepress-3" class="tablepressx tablepress-id-3">
+   <caption style="caption-side: bottom; text-align: left; border: none; background: none; margin: 0; padding: 0;"><a href="../wp-admin/admin.php?page=tablepress&amp;action=edit&amp;table_id=3">Bearbeiten</a></caption>
+   <thead>
+   <tr class="row-1">
+      <th class="column-1">Datum</th>
+      <th class="column-2">Preis</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr class="row-1">
+      <td class="column-1">Datum</td>
+      <td class="column-2">Preis</td>
+   </tr>
+   <tr class="row-2">
+      <td class="column-1">01.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-3">
+      <td class="column-1">02.01.2019</td>
+      <td class="column-2">113,1</td>
+   </tr>
+   <tr class="row-4">
+      <td class="column-1">03.01.2019</td>
+      <td class="column-2">113,6</td>
+   </tr>
+   <tr class="row-5">
+      <td class="column-1">04.01.2019</td>
+      <td class="column-2">114,7</td>
+   </tr>
+   <tr class="row-6">
+      <td class="column-1">05.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-7">
+      <td class="column-1">06.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-8">
+      <td class="column-1">07.01.2019</td>
+      <td class="column-2">115,4</td>
+   </tr>
+   <tr class="row-9">
+      <td class="column-1">08.01.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-10">
+      <td class="column-1">09.01.2019</td>
+      <td class="column-2">116,1</td>
+   </tr>
+   <tr class="row-11">
+      <td class="column-1">10.01.2019</td>
+      <td class="column-2">116,6</td>
+   </tr>
+   <tr class="row-12">
+      <td class="column-1">11.01.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-13">
+      <td class="column-1">12.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-14">
+      <td class="column-1">13.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-15">
+      <td class="column-1">14.01.2019</td>
+      <td class="column-2">115,6</td>
+   </tr>
+   <tr class="row-16">
+      <td class="column-1">15.01.2019</td>
+      <td class="column-2">115,2</td>
+   </tr>
+   <tr class="row-17">
+      <td class="column-1">16.01.2019</td>
+      <td class="column-2">115,1</td>
+   </tr>
+   <tr class="row-18">
+      <td class="column-1">17.01.2019</td>
+      <td class="column-2">115,2</td>
+   </tr>
+   <tr class="row-19">
+      <td class="column-1">18.01.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-20">
+      <td class="column-1">19.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-21">
+      <td class="column-1">20.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-22">
+      <td class="column-1">21.01.2019</td>
+      <td class="column-2">116,3</td>
+   </tr>
+   <tr class="row-23">
+      <td class="column-1">22.01.2019</td>
+      <td class="column-2">115,6</td>
+   </tr>
+   <tr class="row-24">
+      <td class="column-1">23.01.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-25">
+      <td class="column-1">24.01.2019</td>
+      <td class="column-2">115,2</td>
+   </tr>
+   <tr class="row-26">
+      <td class="column-1">25.01.2019</td>
+      <td class="column-2">115,1</td>
+   </tr>
+   <tr class="row-27">
+      <td class="column-1">26.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-28">
+      <td class="column-1">27.01.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-29">
+      <td class="column-1">28.01.2019</td>
+      <td class="column-2">114,6</td>
+   </tr>
+   <tr class="row-30">
+      <td class="column-1">29.01.2019</td>
+      <td class="column-2">114</td>
+   </tr>
+   <tr class="row-31">
+      <td class="column-1">30.01.2019</td>
+      <td class="column-2">115,2</td>
+   </tr>
+   <tr class="row-32">
+      <td class="column-1">31.01.2019</td>
+      <td class="column-2">115,3</td>
+   </tr>
+   <tr class="row-33">
+      <td class="column-1">01.02.2019</td>
+      <td class="column-2">114,6</td>
+   </tr>
+   <tr class="row-34">
+      <td class="column-1">02.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-35">
+      <td class="column-1">03.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-36">
+      <td class="column-1">04.02.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-37">
+      <td class="column-1">05.02.2019</td>
+      <td class="column-2">115,5</td>
+   </tr>
+   <tr class="row-38">
+      <td class="column-1">06.02.2019</td>
+      <td class="column-2">114,9</td>
+   </tr>
+   <tr class="row-39">
+      <td class="column-1">07.02.2019</td>
+      <td class="column-2">115,7</td>
+   </tr>
+   <tr class="row-40">
+      <td class="column-1">08.02.2019</td>
+      <td class="column-2">115,1</td>
+   </tr>
+   <tr class="row-41">
+      <td class="column-1">09.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-42">
+      <td class="column-1">10.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-43">
+      <td class="column-1">11.02.2019</td>
+      <td class="column-2">116,5</td>
+   </tr>
+   <tr class="row-44">
+      <td class="column-1">12.02.2019</td>
+      <td class="column-2">116,6</td>
+   </tr>
+   <tr class="row-45">
+      <td class="column-1">13.02.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-46">
+      <td class="column-1">14.02.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-47">
+      <td class="column-1">15.02.2019</td>
+      <td class="column-2">118,6</td>
+   </tr>
+   <tr class="row-48">
+      <td class="column-1">16.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-49">
+      <td class="column-1">17.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-50">
+      <td class="column-1">18.02.2019</td>
+      <td class="column-2">118,9</td>
+   </tr>
+   <tr class="row-51">
+      <td class="column-1">19.02.2019</td>
+      <td class="column-2">118,6</td>
+   </tr>
+   <tr class="row-52">
+      <td class="column-1">20.02.2019</td>
+      <td class="column-2">117,8</td>
+   </tr>
+   <tr class="row-53">
+      <td class="column-1">21.02.2019</td>
+      <td class="column-2">117,9</td>
+   </tr>
+   <tr class="row-54">
+      <td class="column-1">22.02.2019</td>
+      <td class="column-2">118</td>
+   </tr>
+   <tr class="row-55">
+      <td class="column-1">23.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-56">
+      <td class="column-1">24.02.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-57">
+      <td class="column-1">25.02.2019</td>
+      <td class="column-2">119,5</td>
+   </tr>
+   <tr class="row-58">
+      <td class="column-1">26.02.2019</td>
+      <td class="column-2">118</td>
+   </tr>
+   <tr class="row-59">
+      <td class="column-1">27.02.2019</td>
+      <td class="column-2">118,1</td>
+   </tr>
+   <tr class="row-60">
+      <td class="column-1">28.02.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-61">
+      <td class="column-1">01.03.2019</td>
+      <td class="column-2">118,7</td>
+   </tr>
+   <tr class="row-62">
+      <td class="column-1">02.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-63">
+      <td class="column-1">03.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-64">
+      <td class="column-1">04.03.2019</td>
+      <td class="column-2">119,1</td>
+   </tr>
+   <tr class="row-65">
+      <td class="column-1">05.03.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-66">
+      <td class="column-1">06.03.2019</td>
+      <td class="column-2">118,6</td>
+   </tr>
+   <tr class="row-67">
+      <td class="column-1">07.03.2019</td>
+      <td class="column-2">118,7</td>
+   </tr>
+   <tr class="row-68">
+      <td class="column-1">08.03.2019</td>
+      <td class="column-2">118,3</td>
+   </tr>
+   <tr class="row-69">
+      <td class="column-1">09.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-70">
+      <td class="column-1">10.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-71">
+      <td class="column-1">11.03.2019</td>
+      <td class="column-2">118,4</td>
+   </tr>
+   <tr class="row-72">
+      <td class="column-1">12.03.2019</td>
+      <td class="column-2">118,5</td>
+   </tr>
+   <tr class="row-73">
+      <td class="column-1">13.03.2019</td>
+      <td class="column-2">117,9</td>
+   </tr>
+   <tr class="row-74">
+      <td class="column-1">14.03.2019</td>
+      <td class="column-2">118</td>
+   </tr>
+   <tr class="row-75">
+      <td class="column-1">15.03.2019</td>
+      <td class="column-2">117,7</td>
+   </tr>
+   <tr class="row-76">
+      <td class="column-1">16.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-77">
+      <td class="column-1">17.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-78">
+      <td class="column-1">18.03.2019</td>
+      <td class="column-2">117,6</td>
+   </tr>
+   <tr class="row-79">
+      <td class="column-1">19.03.2019</td>
+      <td class="column-2">117,8</td>
+   </tr>
+   <tr class="row-80">
+      <td class="column-1">20.03.2019</td>
+      <td class="column-2">118,3</td>
+   </tr>
+   <tr class="row-81">
+      <td class="column-1">21.03.2019</td>
+      <td class="column-2">117,8</td>
+   </tr>
+   <tr class="row-82">
+      <td class="column-1">22.03.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-83">
+      <td class="column-1">23.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-84">
+      <td class="column-1">24.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-85">
+      <td class="column-1">25.03.2019</td>
+      <td class="column-2">117,6</td>
+   </tr>
+   <tr class="row-86">
+      <td class="column-1">26.03.2019</td>
+      <td class="column-2">118,1</td>
+   </tr>
+   <tr class="row-87">
+      <td class="column-1">27.03.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-88">
+      <td class="column-1">28.03.2019</td>
+      <td class="column-2">117,8</td>
+   </tr>
+   <tr class="row-89">
+      <td class="column-1">29.03.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-90">
+      <td class="column-1">30.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-91">
+      <td class="column-1">31.03.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-92">
+      <td class="column-1">01.04.2019</td>
+      <td class="column-2">118,5</td>
+   </tr>
+   <tr class="row-93">
+      <td class="column-1">02.04.2019</td>
+      <td class="column-2">118,7</td>
+   </tr>
+   <tr class="row-94">
+      <td class="column-1">03.04.2019</td>
+      <td class="column-2">118,3</td>
+   </tr>
+   <tr class="row-95">
+      <td class="column-1">04.04.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-96">
+      <td class="column-1">05.04.2019</td>
+      <td class="column-2">118,5</td>
+   </tr>
+   <tr class="row-97">
+      <td class="column-1">06.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-98">
+      <td class="column-1">07.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-99">
+      <td class="column-1">08.04.2019</td>
+      <td class="column-2">119,8</td>
+   </tr>
+   <tr class="row-100">
+      <td class="column-1">09.04.2019</td>
+      <td class="column-2">119,5</td>
+   </tr>
+   <tr class="row-101">
+      <td class="column-1">10.04.2019</td>
+      <td class="column-2">119,6</td>
+   </tr>
+   <tr class="row-102">
+      <td class="column-1">11.04.2019</td>
+      <td class="column-2">120,1</td>
+   </tr>
+   <tr class="row-103">
+      <td class="column-1">12.04.2019</td>
+      <td class="column-2">120,1</td>
+   </tr>
+   <tr class="row-104">
+      <td class="column-1">13.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-105">
+      <td class="column-1">14.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-106">
+      <td class="column-1">15.04.2019</td>
+      <td class="column-2">119,6</td>
+   </tr>
+   <tr class="row-107">
+      <td class="column-1">16.04.2019</td>
+      <td class="column-2">118,8</td>
+   </tr>
+   <tr class="row-108">
+      <td class="column-1">17.04.2019</td>
+      <td class="column-2">120,1</td>
+   </tr>
+   <tr class="row-109">
+      <td class="column-1">18.04.2019</td>
+      <td class="column-2">120</td>
+   </tr>
+   <tr class="row-110">
+      <td class="column-1">19.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-111">
+      <td class="column-1">20.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-112">
+      <td class="column-1">21.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-113">
+      <td class="column-1">22.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-114">
+      <td class="column-1">23.04.2019</td>
+      <td class="column-2">121,2</td>
+   </tr>
+   <tr class="row-115">
+      <td class="column-1">24.04.2019</td>
+      <td class="column-2">121</td>
+   </tr>
+   <tr class="row-116">
+      <td class="column-1">25.04.2019</td>
+      <td class="column-2">121,5</td>
+   </tr>
+   <tr class="row-117">
+      <td class="column-1">26.04.2019</td>
+      <td class="column-2">121,2</td>
+   </tr>
+   <tr class="row-118">
+      <td class="column-1">27.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-119">
+      <td class="column-1">28.04.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-120">
+      <td class="column-1">29.04.2019</td>
+      <td class="column-2">120,3</td>
+   </tr>
+   <tr class="row-121">
+      <td class="column-1">30.04.2019</td>
+      <td class="column-2">120,8</td>
+   </tr>
+   <tr class="row-122">
+      <td class="column-1">01.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-123">
+      <td class="column-1">02.05.2019</td>
+      <td class="column-2">121,5</td>
+   </tr>
+   <tr class="row-124">
+      <td class="column-1">03.05.2019</td>
+      <td class="column-2">121,3</td>
+   </tr>
+   <tr class="row-125">
+      <td class="column-1">04.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-126">
+      <td class="column-1">05.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-127">
+      <td class="column-1">06.05.2019</td>
+      <td class="column-2">120,6</td>
+   </tr>
+   <tr class="row-128">
+      <td class="column-1">07.05.2019</td>
+      <td class="column-2">121,1</td>
+   </tr>
+   <tr class="row-129">
+      <td class="column-1">08.05.2019</td>
+      <td class="column-2">120,8</td>
+   </tr>
+   <tr class="row-130">
+      <td class="column-1">09.05.2019</td>
+      <td class="column-2">120,6</td>
+   </tr>
+   <tr class="row-131">
+      <td class="column-1">10.05.2019</td>
+      <td class="column-2">121</td>
+   </tr>
+   <tr class="row-132">
+      <td class="column-1">11.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-133">
+      <td class="column-1">12.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-134">
+      <td class="column-1">13.05.2019</td>
+      <td class="column-2">122</td>
+   </tr>
+   <tr class="row-135">
+      <td class="column-1">14.05.2019</td>
+      <td class="column-2">121,2</td>
+   </tr>
+   <tr class="row-136">
+      <td class="column-1">15.05.2019</td>
+      <td class="column-2">121,6</td>
+   </tr>
+   <tr class="row-137">
+      <td class="column-1">16.05.2019</td>
+      <td class="column-2">124,5</td>
+   </tr>
+   <tr class="row-138">
+      <td class="column-1">17.05.2019</td>
+      <td class="column-2">126,5</td>
+   </tr>
+   <tr class="row-139">
+      <td class="column-1">18.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-140">
+      <td class="column-1">19.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-141">
+      <td class="column-1">20.05.2019</td>
+      <td class="column-2">125,6</td>
+   </tr>
+   <tr class="row-142">
+      <td class="column-1">21.05.2019</td>
+      <td class="column-2">125,2</td>
+   </tr>
+   <tr class="row-143">
+      <td class="column-1">22.05.2019</td>
+      <td class="column-2">124</td>
+   </tr>
+   <tr class="row-144">
+      <td class="column-1">23.05.2019</td>
+      <td class="column-2">123,6</td>
+   </tr>
+   <tr class="row-145">
+      <td class="column-1">24.05.2019</td>
+      <td class="column-2">121,7</td>
+   </tr>
+   <tr class="row-146">
+      <td class="column-1">25.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-147">
+      <td class="column-1">26.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-148">
+      <td class="column-1">27.05.2019</td>
+      <td class="column-2">122,8</td>
+   </tr>
+   <tr class="row-149">
+      <td class="column-1">28.05.2019</td>
+      <td class="column-2">123,4</td>
+   </tr>
+   <tr class="row-150">
+      <td class="column-1">29.05.2019</td>
+      <td class="column-2">122,2</td>
+   </tr>
+   <tr class="row-151">
+      <td class="column-1">30.05.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-152">
+      <td class="column-1">31.05.2019</td>
+      <td class="column-2">119,7</td>
+   </tr>
+   <tr class="row-153">
+      <td class="column-1">01.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-154">
+      <td class="column-1">02.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-155">
+      <td class="column-1">03.06.2019</td>
+      <td class="column-2">118,6</td>
+   </tr>
+   <tr class="row-156">
+      <td class="column-1">04.06.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-157">
+      <td class="column-1">05.06.2019</td>
+      <td class="column-2">117,3</td>
+   </tr>
+   <tr class="row-158">
+      <td class="column-1">06.06.2019</td>
+      <td class="column-2">116</td>
+   </tr>
+   <tr class="row-159">
+      <td class="column-1">07.06.2019</td>
+      <td class="column-2">116,8</td>
+   </tr>
+   <tr class="row-160">
+      <td class="column-1">08.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-161">
+      <td class="column-1">09.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-162">
+      <td class="column-1">10.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-163">
+      <td class="column-1">11.06.2019</td>
+      <td class="column-2">115,6</td>
+   </tr>
+   <tr class="row-164">
+      <td class="column-1">12.06.2019</td>
+      <td class="column-2">115,4</td>
+   </tr>
+   <tr class="row-165">
+      <td class="column-1">13.06.2019</td>
+      <td class="column-2">116,4</td>
+   </tr>
+   <tr class="row-166">
+      <td class="column-1">14.06.2019</td>
+      <td class="column-2">115,9</td>
+   </tr>
+   <tr class="row-167">
+      <td class="column-1">15.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-168">
+      <td class="column-1">16.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-169">
+      <td class="column-1">17.06.2019</td>
+      <td class="column-2">116,4</td>
+   </tr>
+   <tr class="row-170">
+      <td class="column-1">18.06.2019</td>
+      <td class="column-2">115,5</td>
+   </tr>
+   <tr class="row-171">
+      <td class="column-1">19.06.2019</td>
+      <td class="column-2">116</td>
+   </tr>
+   <tr class="row-172">
+      <td class="column-1">20.06.2019</td>
+      <td class="column-2">116,3</td>
+   </tr>
+   <tr class="row-173">
+      <td class="column-1">21.06.2019</td>
+      <td class="column-2">116,5</td>
+   </tr>
+   <tr class="row-174">
+      <td class="column-1">22.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-175">
+      <td class="column-1">23.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-176">
+      <td class="column-1">24.06.2019</td>
+      <td class="column-2">116,3</td>
+   </tr>
+   <tr class="row-177">
+      <td class="column-1">25.06.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-178">
+      <td class="column-1">26.06.2019</td>
+      <td class="column-2">116,4</td>
+   </tr>
+   <tr class="row-179">
+      <td class="column-1">27.06.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-180">
+      <td class="column-1">28.06.2019</td>
+      <td class="column-2">116,2</td>
+   </tr>
+   <tr class="row-181">
+      <td class="column-1">29.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-182">
+      <td class="column-1">30.06.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-183">
+      <td class="column-1">01.07.2019</td>
+      <td class="column-2">117,3</td>
+   </tr>
+   <tr class="row-184">
+      <td class="column-1">02.07.2019</td>
+      <td class="column-2">116,4</td>
+   </tr>
+   <tr class="row-185">
+      <td class="column-1">03.07.2019</td>
+      <td class="column-2">115,3</td>
+   </tr>
+   <tr class="row-186">
+      <td class="column-1">04.07.2019</td>
+      <td class="column-2">115,2</td>
+   </tr>
+   <tr class="row-187">
+      <td class="column-1">05.07.2019</td>
+      <td class="column-2">114,9</td>
+   </tr>
+   <tr class="row-188">
+      <td class="column-1">06.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-189">
+      <td class="column-1">07.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-190">
+      <td class="column-1">08.07.2019</td>
+      <td class="column-2">115,3</td>
+   </tr>
+   <tr class="row-191">
+      <td class="column-1">09.07.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-192">
+      <td class="column-1">10.07.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-193">
+      <td class="column-1">11.07.2019</td>
+      <td class="column-2">118,3</td>
+   </tr>
+   <tr class="row-194">
+      <td class="column-1">12.07.2019</td>
+      <td class="column-2">117,7</td>
+   </tr>
+   <tr class="row-195">
+      <td class="column-1">13.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-196">
+      <td class="column-1">14.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-197">
+      <td class="column-1">15.07.2019</td>
+      <td class="column-2">117,4</td>
+   </tr>
+   <tr class="row-198">
+      <td class="column-1">16.07.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-199">
+      <td class="column-1">17.07.2019</td>
+      <td class="column-2">116,1</td>
+   </tr>
+   <tr class="row-200">
+      <td class="column-1">18.07.2019</td>
+      <td class="column-2">115,6</td>
+   </tr>
+   <tr class="row-201">
+      <td class="column-1">19.07.2019</td>
+      <td class="column-2">115,3</td>
+   </tr>
+   <tr class="row-202">
+      <td class="column-1">20.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-203">
+      <td class="column-1">21.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-204">
+      <td class="column-1">22.07.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-205">
+      <td class="column-1">23.07.2019</td>
+      <td class="column-2">116,2</td>
+   </tr>
+   <tr class="row-206">
+      <td class="column-1">24.07.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-207">
+      <td class="column-1">25.07.2019</td>
+      <td class="column-2">117,1</td>
+   </tr>
+   <tr class="row-208">
+      <td class="column-1">26.07.2019</td>
+      <td class="column-2">116,8</td>
+   </tr>
+   <tr class="row-209">
+      <td class="column-1">27.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-210">
+      <td class="column-1">28.07.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-211">
+      <td class="column-1">29.07.2019</td>
+      <td class="column-2">117,1</td>
+   </tr>
+   <tr class="row-212">
+      <td class="column-1">30.07.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-213">
+      <td class="column-1">31.07.2019</td>
+      <td class="column-2">118,1</td>
+   </tr>
+   <tr class="row-214">
+      <td class="column-1">01.08.2019</td>
+      <td class="column-2">118</td>
+   </tr>
+   <tr class="row-215">
+      <td class="column-1">02.08.2019</td>
+      <td class="column-2">116,4</td>
+   </tr>
+   <tr class="row-216">
+      <td class="column-1">03.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-217">
+      <td class="column-1">04.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-218">
+      <td class="column-1">05.08.2019</td>
+      <td class="column-2">115,4</td>
+   </tr>
+   <tr class="row-219">
+      <td class="column-1">06.08.2019</td>
+      <td class="column-2">114,6</td>
+   </tr>
+   <tr class="row-220">
+      <td class="column-1">07.08.2019</td>
+      <td class="column-2">114</td>
+   </tr>
+   <tr class="row-221">
+      <td class="column-1">08.08.2019</td>
+      <td class="column-2">112,7</td>
+   </tr>
+   <tr class="row-222">
+      <td class="column-1">09.08.2019</td>
+      <td class="column-2">113,3</td>
+   </tr>
+   <tr class="row-223">
+      <td class="column-1">10.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-224">
+      <td class="column-1">11.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-225">
+      <td class="column-1">12.08.2019</td>
+      <td class="column-2">114</td>
+   </tr>
+   <tr class="row-226">
+      <td class="column-1">13.08.2019</td>
+      <td class="column-2">114,1</td>
+   </tr>
+   <tr class="row-227">
+      <td class="column-1">14.08.2019</td>
+      <td class="column-2">116,1</td>
+   </tr>
+   <tr class="row-228">
+      <td class="column-1">15.08.2019</td>
+      <td class="column-2">115,4</td>
+   </tr>
+   <tr class="row-229">
+      <td class="column-1">16.08.2019</td>
+      <td class="column-2">115,3</td>
+   </tr>
+   <tr class="row-230">
+      <td class="column-1">17.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-231">
+      <td class="column-1">18.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-232">
+      <td class="column-1">19.08.2019</td>
+      <td class="column-2">115,4</td>
+   </tr>
+   <tr class="row-233">
+      <td class="column-1">20.08.2019</td>
+      <td class="column-2">115,5</td>
+   </tr>
+   <tr class="row-234">
+      <td class="column-1">21.08.2019</td>
+      <td class="column-2">116</td>
+   </tr>
+   <tr class="row-235">
+      <td class="column-1">22.08.2019</td>
+      <td class="column-2">116,1</td>
+   </tr>
+   <tr class="row-236">
+      <td class="column-1">23.08.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-237">
+      <td class="column-1">24.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-238">
+      <td class="column-1">25.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-239">
+      <td class="column-1">26.08.2019</td>
+      <td class="column-2">115,7</td>
+   </tr>
+   <tr class="row-240">
+      <td class="column-1">27.08.2019</td>
+      <td class="column-2">115,3</td>
+   </tr>
+   <tr class="row-241">
+      <td class="column-1">28.08.2019</td>
+      <td class="column-2">115,9</td>
+   </tr>
+   <tr class="row-242">
+      <td class="column-1">29.08.2019</td>
+      <td class="column-2">116,5</td>
+   </tr>
+   <tr class="row-243">
+      <td class="column-1">30.08.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-244">
+      <td class="column-1">31.08.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-245">
+      <td class="column-1">01.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-246">
+      <td class="column-1">02.09.2019</td>
+      <td class="column-2">116,6</td>
+   </tr>
+   <tr class="row-247">
+      <td class="column-1">03.09.2019</td>
+      <td class="column-2">115,9</td>
+   </tr>
+   <tr class="row-248">
+      <td class="column-1">04.09.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-249">
+      <td class="column-1">05.09.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-250">
+      <td class="column-1">06.09.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-251">
+      <td class="column-1">07.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-252">
+      <td class="column-1">08.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-253">
+      <td class="column-1">09.09.2019</td>
+      <td class="column-2">117,6</td>
+   </tr>
+   <tr class="row-254">
+      <td class="column-1">10.09.2019</td>
+      <td class="column-2">118,3</td>
+   </tr>
+   <tr class="row-255">
+      <td class="column-1">11.09.2019</td>
+      <td class="column-2">118,5</td>
+   </tr>
+   <tr class="row-256">
+      <td class="column-1">12.09.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-257">
+      <td class="column-1">13.09.2019</td>
+      <td class="column-2">116,5</td>
+   </tr>
+   <tr class="row-258">
+      <td class="column-1">14.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-259">
+      <td class="column-1">15.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-260">
+      <td class="column-1">16.09.2019</td>
+      <td class="column-2">121,6</td>
+   </tr>
+   <tr class="row-261">
+      <td class="column-1">17.09.2019</td>
+      <td class="column-2">123,5</td>
+   </tr>
+   <tr class="row-262">
+      <td class="column-1">18.09.2019</td>
+      <td class="column-2">120,8</td>
+   </tr>
+   <tr class="row-263">
+      <td class="column-1">19.09.2019</td>
+      <td class="column-2">120,4</td>
+   </tr>
+   <tr class="row-264">
+      <td class="column-1">20.09.2019</td>
+      <td class="column-2">120,5</td>
+   </tr>
+   <tr class="row-265">
+      <td class="column-1">21.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-266">
+      <td class="column-1">22.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-267">
+      <td class="column-1">23.09.2019</td>
+      <td class="column-2">120,2</td>
+   </tr>
+   <tr class="row-268">
+      <td class="column-1">24.09.2019</td>
+      <td class="column-2">119,5</td>
+   </tr>
+   <tr class="row-269">
+      <td class="column-1">25.09.2019</td>
+      <td class="column-2">118,7</td>
+   </tr>
+   <tr class="row-270">
+      <td class="column-1">26.09.2019</td>
+      <td class="column-2">119,3</td>
+   </tr>
+   <tr class="row-271">
+      <td class="column-1">27.09.2019</td>
+      <td class="column-2">119,9</td>
+   </tr>
+   <tr class="row-272">
+      <td class="column-1">28.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-273">
+      <td class="column-1">29.09.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-274">
+      <td class="column-1">30.09.2019</td>
+      <td class="column-2">119</td>
+   </tr>
+   <tr class="row-275">
+      <td class="column-1">01.10.2019</td>
+      <td class="column-2">118,9</td>
+   </tr>
+   <tr class="row-276">
+      <td class="column-1">02.10.2019</td>
+      <td class="column-2">118,3</td>
+   </tr>
+   <tr class="row-277">
+      <td class="column-1">03.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-278">
+      <td class="column-1">04.10.2019</td>
+      <td class="column-2">117,6</td>
+   </tr>
+   <tr class="row-279">
+      <td class="column-1">05.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-280">
+      <td class="column-1">06.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-281">
+      <td class="column-1">07.10.2019</td>
+      <td class="column-2">118,1</td>
+   </tr>
+   <tr class="row-282">
+      <td class="column-1">08.10.2019</td>
+      <td class="column-2">117,9</td>
+   </tr>
+   <tr class="row-283">
+      <td class="column-1">09.10.2019</td>
+      <td class="column-2">117,6</td>
+   </tr>
+   <tr class="row-284">
+      <td class="column-1">10.10.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-285">
+      <td class="column-1">11.10.2019</td>
+      <td class="column-2">118,8</td>
+   </tr>
+   <tr class="row-286">
+      <td class="column-1">12.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-287">
+      <td class="column-1">13.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-288">
+      <td class="column-1">14.10.2019</td>
+      <td class="column-2">118,2</td>
+   </tr>
+   <tr class="row-289">
+      <td class="column-1">15.10.2019</td>
+      <td class="column-2">117,4</td>
+   </tr>
+   <tr class="row-290">
+      <td class="column-1">16.10.2019</td>
+      <td class="column-2">117,3</td>
+   </tr>
+   <tr class="row-291">
+      <td class="column-1">17.10.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-292">
+      <td class="column-1">18.10.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-293">
+      <td class="column-1">19.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-294">
+      <td class="column-1">20.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-295">
+      <td class="column-1">21.10.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-296">
+      <td class="column-1">22.10.2019</td>
+      <td class="column-2">117,3</td>
+   </tr>
+   <tr class="row-297">
+      <td class="column-1">23.10.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-298">
+      <td class="column-1">24.10.2019</td>
+      <td class="column-2">117,4</td>
+   </tr>
+   <tr class="row-299">
+      <td class="column-1">25.10.2019</td>
+      <td class="column-2">117,9</td>
+   </tr>
+   <tr class="row-300">
+      <td class="column-1">26.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-301">
+      <td class="column-1">27.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-302">
+      <td class="column-1">28.10.2019</td>
+      <td class="column-2">117,1</td>
+   </tr>
+   <tr class="row-303">
+      <td class="column-1">29.10.2019</td>
+      <td class="column-2">117,1</td>
+   </tr>
+   <tr class="row-304">
+      <td class="column-1">30.10.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-305">
+      <td class="column-1">31.10.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-306">
+      <td class="column-1">01.11.2019</td>
+      <td class="column-2">114,6</td>
+   </tr>
+   <tr class="row-307">
+      <td class="column-1">02.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-308">
+      <td class="column-1">03.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-309">
+      <td class="column-1">04.11.2019</td>
+      <td class="column-2">116,4</td>
+   </tr>
+   <tr class="row-310">
+      <td class="column-1">05.11.2019</td>
+      <td class="column-2">116,7</td>
+   </tr>
+   <tr class="row-311">
+      <td class="column-1">06.11.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-312">
+      <td class="column-1">07.11.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-313">
+      <td class="column-1">08.11.2019</td>
+      <td class="column-2">115,9</td>
+   </tr>
+   <tr class="row-314">
+      <td class="column-1">09.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-315">
+      <td class="column-1">10.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-316">
+      <td class="column-1">11.11.2019</td>
+      <td class="column-2">116,3</td>
+   </tr>
+   <tr class="row-317">
+      <td class="column-1">12.11.2019</td>
+      <td class="column-2">116,7</td>
+   </tr>
+   <tr class="row-318">
+      <td class="column-1">13.11.2019</td>
+      <td class="column-2">115,7</td>
+   </tr>
+   <tr class="row-319">
+      <td class="column-1">14.11.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-320">
+      <td class="column-1">15.11.2019</td>
+      <td class="column-2">116,9</td>
+   </tr>
+   <tr class="row-321">
+      <td class="column-1">16.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-322">
+      <td class="column-1">17.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-323">
+      <td class="column-1">18.11.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-324">
+      <td class="column-1">19.11.2019</td>
+      <td class="column-2">115,8</td>
+   </tr>
+   <tr class="row-325">
+      <td class="column-1">20.11.2019</td>
+      <td class="column-2">115,4</td>
+   </tr>
+   <tr class="row-326">
+      <td class="column-1">21.11.2019</td>
+      <td class="column-2">115,7</td>
+   </tr>
+   <tr class="row-327">
+      <td class="column-1">22.11.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-328">
+      <td class="column-1">23.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-329">
+      <td class="column-1">24.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-330">
+      <td class="column-1">25.11.2019</td>
+      <td class="column-2">117</td>
+   </tr>
+   <tr class="row-331">
+      <td class="column-1">26.11.2019</td>
+      <td class="column-2">117,4</td>
+   </tr>
+   <tr class="row-332">
+      <td class="column-1">27.11.2019</td>
+      <td class="column-2">117,8</td>
+   </tr>
+   <tr class="row-333">
+      <td class="column-1">28.11.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-334">
+      <td class="column-1">29.11.2019</td>
+      <td class="column-2">117,3</td>
+   </tr>
+   <tr class="row-335">
+      <td class="column-1">30.11.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-336">
+      <td class="column-1">01.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-337">
+      <td class="column-1">02.12.2019</td>
+      <td class="column-2">116,7</td>
+   </tr>
+   <tr class="row-338">
+      <td class="column-1">03.12.2019</td>
+      <td class="column-2">115,7</td>
+   </tr>
+   <tr class="row-339">
+      <td class="column-1">04.12.2019</td>
+      <td class="column-2">116,3</td>
+   </tr>
+   <tr class="row-340">
+      <td class="column-1">05.12.2019</td>
+      <td class="column-2">116,6</td>
+   </tr>
+   <tr class="row-341">
+      <td class="column-1">06.12.2019</td>
+      <td class="column-2">116,6</td>
+   </tr>
+   <tr class="row-342">
+      <td class="column-1">07.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-343">
+      <td class="column-1">08.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-344">
+      <td class="column-1">09.12.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-345">
+      <td class="column-1">10.12.2019</td>
+      <td class="column-2">118,6</td>
+   </tr>
+   <tr class="row-346">
+      <td class="column-1">11.12.2019</td>
+      <td class="column-2">118,7</td>
+   </tr>
+   <tr class="row-347">
+      <td class="column-1">12.12.2019</td>
+      <td class="column-2">117,5</td>
+   </tr>
+   <tr class="row-348">
+      <td class="column-1">13.12.2019</td>
+      <td class="column-2">117,2</td>
+   </tr>
+   <tr class="row-349">
+      <td class="column-1">14.12.2019</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-350">
+      <td class="column-1">15.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-351">
+      <td class="column-1">16.12.2019</td>
+      <td class="column-2">116,5</td>
+   </tr>
+   <tr class="row-352">
+      <td class="column-1">17.12.2019</td>
+      <td class="column-2">116,3</td>
+   </tr>
+   <tr class="row-353">
+      <td class="column-1">18.12.2019</td>
+      <td class="column-2">118,9</td>
+   </tr>
+   <tr class="row-354">
+      <td class="column-1">19.12.2019</td>
+      <td class="column-2">120,5</td>
+   </tr>
+   <tr class="row-355">
+      <td class="column-1">20.12.2019</td>
+      <td class="column-2">121,2</td>
+   </tr>
+   <tr class="row-356">
+      <td class="column-1">21.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-357">
+      <td class="column-1">22.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-358">
+      <td class="column-1">23.12.2019</td>
+      <td class="column-2">119,2</td>
+   </tr>
+   <tr class="row-359">
+      <td class="column-1">24.12.2019</td>
+      <td class="column-2">112,2</td>
+   </tr>
+   <tr class="row-360">
+      <td class="column-1">25.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-361">
+      <td class="column-1">26.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-362">
+      <td class="column-1">27.12.2019</td>
+      <td class="column-2">108,2</td>
+   </tr>
+   <tr class="row-363">
+      <td class="column-1">28.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-364">
+      <td class="column-1">29.12.2019</td>
+      <td class="column-2">&nbsp;</td>
+   </tr>
+   <tr class="row-365">
+      <td class="column-1">30.12.2019</td>
+      <td class="column-2">108,2</td>
+   </tr>
+   <tr class="row-366">
+      <td class="column-1">31.12.2019</td>
+      <td class="column-2">105,5</td>
+   </tr>
+   <tr class="row-3">
+      <td class="column-1">01.01.2020</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-4">
+      <td class="column-1">02.01.2020</td>
+      <td class="column-2">102,9</td>
+   </tr>
+   <tr class="row-5">
+      <td class="column-1">03.01.2020</td>
+      <td class="column-2">104,3</td>
+   </tr>
+   <tr class="row-6">
+      <td class="column-1">04.01.2020</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-7">
+      <td class="column-1">05.01.2020</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-8">
+      <td class="column-1">06.01.2020</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-9">
+      <td class="column-1">07.01.2020</td>
+      <td class="column-2">103,3</td>
+   </tr>
+   <tr class="row-10">
+      <td class="column-1">08.01.2020</td>
+      <td class="column-2">103,5</td>
+   </tr>
+   <tr class="row-11">
+      <td class="column-1">09.01.2020</td>
+      <td class="column-2">101,8</td>
+   </tr>
+   <tr class="row-12">
+      <td class="column-1">10.01.2020</td>
+      <td class="column-2">101,7</td>
+   </tr>
+   <tr class="row-13">
+      <td class="column-1">11.01.2020</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-14">
+      <td class="column-1">12.01.2020</td>
+      <td class="column-2"></td>
+   </tr>
+   <tr class="row-15">
+      <td class="column-1">13.01.2020</td>
+      <td class="column-2">101,20</td>
+   </tr>
+   <tr class="row-16">
+      <td class="column-1">14.01.2020</td>
+      <td class="column-2">100,00</td>
+   </tr>
+   <tr class="row-17">
+      <td class="column-1">15.01.2020</td>
+      <td class="column-2">100,40</td>
+   </tr>
+
+   </tbody>
+</table>
+<table id="tablepress-2" class="tablepress tablepress-id-2">
+   <thead>
+   <tr class="row-1">
+      <th class="column-1">Datum</th><th class="column-2">Standard</th><th class="column-3">Premium</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr class="row-2">
+      <td class="column-1">01.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-3">
+      <td class="column-1">02.01.2019</td><td class="column-2">62,3</td><td class="column-3">64,1</td>
+   </tr>
+   <tr class="row-4">
+      <td class="column-1">03.01.2019</td><td class="column-2">63,5</td><td class="column-3">65,3</td>
+   </tr>
+   <tr class="row-5">
+      <td class="column-1">04.01.2019</td><td class="column-2">65,3</td><td class="column-3">67,1</td>
+   </tr>
+   <tr class="row-6">
+      <td class="column-1">05.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-7">
+      <td class="column-1">06.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-8">
+      <td class="column-1">07.01.2019</td><td class="column-2">65,9</td><td class="column-3">67,7</td>
+   </tr>
+   <tr class="row-9">
+      <td class="column-1">08.01.2019</td><td class="column-2">66,6</td><td class="column-3">68,4</td>
+   </tr>
+   <tr class="row-10">
+      <td class="column-1">09.01.2019</td><td class="column-2">67,3</td><td class="column-3">69,1</td>
+   </tr>
+   <tr class="row-11">
+      <td class="column-1">10.01.2019</td><td class="column-2">67,5</td><td class="column-3">69,3</td>
+   </tr>
+   <tr class="row-12">
+      <td class="column-1">11.01.2019</td><td class="column-2">67,9</td><td class="column-3">69,7</td>
+   </tr>
+   <tr class="row-13">
+      <td class="column-1">12.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-14">
+      <td class="column-1">13.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-15">
+      <td class="column-1">14.01.2019</td><td class="column-2">66,8</td><td class="column-3">68,6</td>
+   </tr>
+   <tr class="row-16">
+      <td class="column-1">15.01.2019</td><td class="column-2">66,2</td><td class="column-3">68</td>
+   </tr>
+   <tr class="row-17">
+      <td class="column-1">16.01.2019</td><td class="column-2">66,2</td><td class="column-3">68</td>
+   </tr>
+   <tr class="row-18">
+      <td class="column-1">17.01.2019</td><td class="column-2">66,7</td><td class="column-3">68,5</td>
+   </tr>
+   <tr class="row-19">
+      <td class="column-1">18.01.2019</td><td class="column-2">67,4</td><td class="column-3">69,2</td>
+   </tr>
+   <tr class="row-20">
+      <td class="column-1">19.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-21">
+      <td class="column-1">20.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-22">
+      <td class="column-1">21.01.2019</td><td class="column-2">67,3</td><td class="column-3">69,1</td>
+   </tr>
+   <tr class="row-23">
+      <td class="column-1">22.01.2019</td><td class="column-2">67,4</td><td class="column-3">69,2</td>
+   </tr>
+   <tr class="row-24">
+      <td class="column-1">23.01.2019</td><td class="column-2">67,4</td><td class="column-3">69,2</td>
+   </tr>
+   <tr class="row-25">
+      <td class="column-1">24.01.2019</td><td class="column-2">66,3</td><td class="column-3">68,1</td>
+   </tr>
+   <tr class="row-26">
+      <td class="column-1">25.01.2019</td><td class="column-2">66,3</td><td class="column-3">68,1</td>
+   </tr>
+   <tr class="row-27">
+      <td class="column-1">26.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-28">
+      <td class="column-1">27.01.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-29">
+      <td class="column-1">28.01.2019</td><td class="column-2">65,5</td><td class="column-3">67,3</td>
+   </tr>
+   <tr class="row-30">
+      <td class="column-1">29.01.2019</td><td class="column-2">65,3</td><td class="column-3">67,1</td>
+   </tr>
+   <tr class="row-31">
+      <td class="column-1">30.01.2019</td><td class="column-2">66,4</td><td class="column-3">68,2</td>
+   </tr>
+   <tr class="row-32">
+      <td class="column-1">31.01.2019</td><td class="column-2">66,5</td><td class="column-3">68,3</td>
+   </tr>
+   <tr class="row-33">
+      <td class="column-1">01.02.2019</td><td class="column-2">65,5</td><td class="column-3">67,3</td>
+   </tr>
+   <tr class="row-34">
+      <td class="column-1">02.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-35">
+      <td class="column-1">03.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-36">
+      <td class="column-1">04.02.2019</td><td class="column-2">66,5</td><td class="column-3">68,3</td>
+   </tr>
+   <tr class="row-37">
+      <td class="column-1">05.02.2019</td><td class="column-2">65,5</td><td class="column-3">67,3</td>
+   </tr>
+   <tr class="row-38">
+      <td class="column-1">06.02.2019</td><td class="column-2">66,2</td><td class="column-3">68</td>
+   </tr>
+   <tr class="row-39">
+      <td class="column-1">07.02.2019</td><td class="column-2">66,4</td><td class="column-3">68,2</td>
+   </tr>
+   <tr class="row-40">
+      <td class="column-1">08.02.2019</td><td class="column-2">66,6</td><td class="column-3">68,4</td>
+   </tr>
+   <tr class="row-41">
+      <td class="column-1">09.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-42">
+      <td class="column-1">10.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-43">
+      <td class="column-1">11.02.2019</td><td class="column-2">67,5</td><td class="column-3">69,3</td>
+   </tr>
+   <tr class="row-44">
+      <td class="column-1">12.02.2019</td><td class="column-2">67,3</td><td class="column-3">69,1</td>
+   </tr>
+   <tr class="row-45">
+      <td class="column-1">13.02.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-46">
+      <td class="column-1">14.02.2019</td><td class="column-2">68</td><td class="column-3">69,8</td>
+   </tr>
+   <tr class="row-47">
+      <td class="column-1">15.02.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-48">
+      <td class="column-1">16.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-49">
+      <td class="column-1">17.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-50">
+      <td class="column-1">18.02.2019</td><td class="column-2">69,5</td><td class="column-3">71,3</td>
+   </tr>
+   <tr class="row-51">
+      <td class="column-1">19.02.2019</td><td class="column-2">69,2</td><td class="column-3">71</td>
+   </tr>
+   <tr class="row-52">
+      <td class="column-1">20.02.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-53">
+      <td class="column-1">21.02.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-54">
+      <td class="column-1">22.02.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-55">
+      <td class="column-1">23.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-56">
+      <td class="column-1">24.02.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-57">
+      <td class="column-1">25.02.2019</td><td class="column-2">70,2</td><td class="column-3">72</td>
+   </tr>
+   <tr class="row-58">
+      <td class="column-1">26.02.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-59">
+      <td class="column-1">27.02.2019</td><td class="column-2">69,1</td><td class="column-3">70,9</td>
+   </tr>
+   <tr class="row-60">
+      <td class="column-1">28.02.2019</td><td class="column-2">69,1</td><td class="column-3">70,9</td>
+   </tr>
+   <tr class="row-61">
+      <td class="column-1">01.03.2019</td><td class="column-2">69,6</td><td class="column-3">71,4</td>
+   </tr>
+   <tr class="row-62">
+      <td class="column-1">02.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-63">
+      <td class="column-1">03.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-64">
+      <td class="column-1">04.03.2019</td><td class="column-2">70,2</td><td class="column-3">72</td>
+   </tr>
+   <tr class="row-65">
+      <td class="column-1">05.03.2019</td><td class="column-2">69,3</td><td class="column-3">71,1</td>
+   </tr>
+   <tr class="row-66">
+      <td class="column-1">06.03.2019</td><td class="column-2">69,7</td><td class="column-3">71,5</td>
+   </tr>
+   <tr class="row-67">
+      <td class="column-1">07.03.2019</td><td class="column-2">70,2</td><td class="column-3">72</td>
+   </tr>
+   <tr class="row-68">
+      <td class="column-1">08.03.2019</td><td class="column-2">69,7</td><td class="column-3">71,5</td>
+   </tr>
+   <tr class="row-69">
+      <td class="column-1">09.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-70">
+      <td class="column-1">10.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-71">
+      <td class="column-1">11.03.2019</td><td class="column-2">69,3</td><td class="column-3">71,1</td>
+   </tr>
+   <tr class="row-72">
+      <td class="column-1">12.03.2019</td><td class="column-2">69,4</td><td class="column-3">71,2</td>
+   </tr>
+   <tr class="row-73">
+      <td class="column-1">13.03.2019</td><td class="column-2">68,7</td><td class="column-3">70,5</td>
+   </tr>
+   <tr class="row-74">
+      <td class="column-1">14.03.2019</td><td class="column-2">68,8</td><td class="column-3">70,6</td>
+   </tr>
+   <tr class="row-75">
+      <td class="column-1">15.03.2019</td><td class="column-2">68,7</td><td class="column-3">70,5</td>
+   </tr>
+   <tr class="row-76">
+      <td class="column-1">16.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-77">
+      <td class="column-1">17.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-78">
+      <td class="column-1">18.03.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-79">
+      <td class="column-1">19.03.2019</td><td class="column-2">69,2</td><td class="column-3">71</td>
+   </tr>
+   <tr class="row-80">
+      <td class="column-1">20.03.2019</td><td class="column-2">69,5</td><td class="column-3">71,3</td>
+   </tr>
+   <tr class="row-81">
+      <td class="column-1">21.03.2019</td><td class="column-2">68,8</td><td class="column-3">70,6</td>
+   </tr>
+   <tr class="row-82">
+      <td class="column-1">22.03.2019</td><td class="column-2">68,5</td><td class="column-3">70,3</td>
+   </tr>
+   <tr class="row-83">
+      <td class="column-1">23.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-84">
+      <td class="column-1">24.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-85">
+      <td class="column-1">25.03.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-86">
+      <td class="column-1">26.03.2019</td><td class="column-2">69,1</td><td class="column-3">70,9</td>
+   </tr>
+   <tr class="row-87">
+      <td class="column-1">27.03.2019</td><td class="column-2">98,9</td><td class="column-3">100,7</td>
+   </tr>
+   <tr class="row-88">
+      <td class="column-1">28.03.2019</td><td class="column-2">68,9</td><td class="column-3">70,7</td>
+   </tr>
+   <tr class="row-89">
+      <td class="column-1">29.03.2019</td><td class="column-2">69,2</td><td class="column-3">71</td>
+   </tr>
+   <tr class="row-90">
+      <td class="column-1">30.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-91">
+      <td class="column-1">31.03.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-92">
+      <td class="column-1">01.04.2019</td><td class="column-2">69,5</td><td class="column-3">71,3</td>
+   </tr>
+   <tr class="row-93">
+      <td class="column-1">02.04.2019</td><td class="column-2">70,2</td><td class="column-3">72</td>
+   </tr>
+   <tr class="row-94">
+      <td class="column-1">03.04.2019</td><td class="column-2">70</td><td class="column-3">71,8</td>
+   </tr>
+   <tr class="row-95">
+      <td class="column-1">04.04.2019</td><td class="column-2">70</td><td class="column-3">71,8</td>
+   </tr>
+   <tr class="row-96">
+      <td class="column-1">05.04.2019</td><td class="column-2">70,2</td><td class="column-3">72</td>
+   </tr>
+   <tr class="row-97">
+      <td class="column-1">06.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-98">
+      <td class="column-1">07.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-99">
+      <td class="column-1">08.04.2019</td><td class="column-2">71,5</td><td class="column-3">73,3</td>
+   </tr>
+   <tr class="row-100">
+      <td class="column-1">09.04.2019</td><td class="column-2">71</td><td class="column-3">72,8</td>
+   </tr>
+   <tr class="row-101">
+      <td class="column-1">10.04.2019</td><td class="column-2">71</td><td class="column-3">72,8</td>
+   </tr>
+   <tr class="row-102">
+      <td class="column-1">11.04.2019</td><td class="column-2">71,1</td><td class="column-3">72,9</td>
+   </tr>
+   <tr class="row-103">
+      <td class="column-1">12.04.2019</td><td class="column-2">71,2</td><td class="column-3">73</td>
+   </tr>
+   <tr class="row-104">
+      <td class="column-1">13.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-105">
+      <td class="column-1">14.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-106">
+      <td class="column-1">15.04.2019</td><td class="column-2">71,1</td><td class="column-3">72,9</td>
+   </tr>
+   <tr class="row-107">
+      <td class="column-1">16.04.2019</td><td class="column-2">71</td><td class="column-3">72,8</td>
+   </tr>
+   <tr class="row-108">
+      <td class="column-1">17.04.2019</td><td class="column-2">71,4</td><td class="column-3">73,2</td>
+   </tr>
+   <tr class="row-109">
+      <td class="column-1">18.04.2019</td><td class="column-2">70,9</td><td class="column-3">72,7</td>
+   </tr>
+   <tr class="row-110">
+      <td class="column-1">19.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-111">
+      <td class="column-1">20.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-112">
+      <td class="column-1">21.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-113">
+      <td class="column-1">22.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-114">
+      <td class="column-1">23.04.2019</td><td class="column-2">72,5</td><td class="column-3">74,3</td>
+   </tr>
+   <tr class="row-115">
+      <td class="column-1">24.04.2019</td><td class="column-2">72,3</td><td class="column-3">74,1</td>
+   </tr>
+   <tr class="row-116">
+      <td class="column-1">25.04.2019</td><td class="column-2">72,7</td><td class="column-3">74,5</td>
+   </tr>
+   <tr class="row-117">
+      <td class="column-1">26.04.2019</td><td class="column-2">72,2</td><td class="column-3">74</td>
+   </tr>
+   <tr class="row-118">
+      <td class="column-1">27.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-119">
+      <td class="column-1">28.04.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-120">
+      <td class="column-1">29.04.2019</td><td class="column-2">71,1</td><td class="column-3">72,9</td>
+   </tr>
+   <tr class="row-121">
+      <td class="column-1">30.04.2019</td><td class="column-2">72,1</td><td class="column-3">73,9</td>
+   </tr>
+   <tr class="row-122">
+      <td class="column-1">01.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-123">
+      <td class="column-1">02.05.2019</td><td class="column-2">72,5</td><td class="column-3">74,3</td>
+   </tr>
+   <tr class="row-124">
+      <td class="column-1">03.05.2019</td><td class="column-2">72,1</td><td class="column-3">73,9</td>
+   </tr>
+   <tr class="row-125">
+      <td class="column-1">04.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-126">
+      <td class="column-1">05.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-127">
+      <td class="column-1">06.05.2019</td><td class="column-2">72</td><td class="column-3">73,8</td>
+   </tr>
+   <tr class="row-128">
+      <td class="column-1">07.05.2019</td><td class="column-2">72,4</td><td class="column-3">74,2</td>
+   </tr>
+   <tr class="row-129">
+      <td class="column-1">08.05.2019</td><td class="column-2">72</td><td class="column-3">73,8</td>
+   </tr>
+   <tr class="row-130">
+      <td class="column-1">09.05.2019</td><td class="column-2">72,1</td><td class="column-3">73,9</td>
+   </tr>
+   <tr class="row-131">
+      <td class="column-1">10.05.2019</td><td class="column-2">71,9</td><td class="column-3">73,7</td>
+   </tr>
+   <tr class="row-132">
+      <td class="column-1">11.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-133">
+      <td class="column-1">12.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-134">
+      <td class="column-1">13.05.2019</td><td class="column-2">73,2</td><td class="column-3">75</td>
+   </tr>
+   <tr class="row-135">
+      <td class="column-1">14.05.2019</td><td class="column-2">72,2</td><td class="column-3">74</td>
+   </tr>
+   <tr class="row-136">
+      <td class="column-1">15.05.2019</td><td class="column-2">72,5</td><td class="column-3">74,3</td>
+   </tr>
+   <tr class="row-137">
+      <td class="column-1">16.05.2019</td><td class="column-2">75,3</td><td class="column-3">77,1</td>
+   </tr>
+   <tr class="row-138">
+      <td class="column-1">17.05.2019</td><td class="column-2">76,5</td><td class="column-3">78,3</td>
+   </tr>
+   <tr class="row-139">
+      <td class="column-1">18.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-140">
+      <td class="column-1">19.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-141">
+      <td class="column-1">20.05.2019</td><td class="column-2">76,6</td><td class="column-3">78,4</td>
+   </tr>
+   <tr class="row-142">
+      <td class="column-1">21.05.2019</td><td class="column-2">76</td><td class="column-3">77,8</td>
+   </tr>
+   <tr class="row-143">
+      <td class="column-1">22.05.2019</td><td class="column-2">75,7</td><td class="column-3">77,5</td>
+   </tr>
+   <tr class="row-144">
+      <td class="column-1">23.05.2019</td><td class="column-2">74,2</td><td class="column-3">76</td>
+   </tr>
+   <tr class="row-145">
+      <td class="column-1">24.05.2019</td><td class="column-2">73,3</td><td class="column-3">75,1</td>
+   </tr>
+   <tr class="row-146">
+      <td class="column-1">25.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-147">
+      <td class="column-1">26.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-148">
+      <td class="column-1">27.05.2019</td><td class="column-2">73,9</td><td class="column-3">75,7</td>
+   </tr>
+   <tr class="row-149">
+      <td class="column-1">28.05.2019</td><td class="column-2">74,5</td><td class="column-3">76,3</td>
+   </tr>
+   <tr class="row-150">
+      <td class="column-1">29.05.2019</td><td class="column-2">73,3</td><td class="column-3">75,1</td>
+   </tr>
+   <tr class="row-151">
+      <td class="column-1">30.05.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-152">
+      <td class="column-1">31.05.2019</td><td class="column-2">71,5</td><td class="column-3">73,3</td>
+   </tr>
+   <tr class="row-153">
+      <td class="column-1">01.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-154">
+      <td class="column-1">02.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-155">
+      <td class="column-1">03.06.2019</td><td class="column-2">69,8</td><td class="column-3">71,6</td>
+   </tr>
+   <tr class="row-156">
+      <td class="column-1">04.06.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-157">
+      <td class="column-1">05.06.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-158">
+      <td class="column-1">06.06.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-159">
+      <td class="column-1">07.06.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-160">
+      <td class="column-1">08.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-161">
+      <td class="column-1">09.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-162">
+      <td class="column-1">10.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-163">
+      <td class="column-1">11.06.2019</td><td class="column-2">67,5</td><td class="column-3">69,3</td>
+   </tr>
+   <tr class="row-164">
+      <td class="column-1">12.06.2019</td><td class="column-2">67,3</td><td class="column-3">69,1</td>
+   </tr>
+   <tr class="row-165">
+      <td class="column-1">13.06.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-166">
+      <td class="column-1">14.06.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-167">
+      <td class="column-1">15.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-168">
+      <td class="column-1">16.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-169">
+      <td class="column-1">17.06.2019</td><td class="column-2">67,9</td><td class="column-3">69,7</td>
+   </tr>
+   <tr class="row-170">
+      <td class="column-1">18.06.2019</td><td class="column-2">67,3</td><td class="column-3">69,1</td>
+   </tr>
+   <tr class="row-171">
+      <td class="column-1">19.06.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-172">
+      <td class="column-1">20.06.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-173">
+      <td class="column-1">21.06.2019</td><td class="column-2">69</td><td class="column-3">70,8</td>
+   </tr>
+   <tr class="row-174">
+      <td class="column-1">22.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-175">
+      <td class="column-1">23.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-176">
+      <td class="column-1">24.06.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-177">
+      <td class="column-1">25.06.2019</td><td class="column-2">67,5</td><td class="column-3">69,3</td>
+   </tr>
+   <tr class="row-178">
+      <td class="column-1">26.06.2019</td><td class="column-2">68,5</td><td class="column-3">70,3</td>
+   </tr>
+   <tr class="row-179">
+      <td class="column-1">27.06.2019</td><td class="column-2">68,8</td><td class="column-3">70,6</td>
+   </tr>
+   <tr class="row-180">
+      <td class="column-1">28.06.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-181">
+      <td class="column-1">29.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-182">
+      <td class="column-1">30.06.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-183">
+      <td class="column-1">01.07.2019</td><td class="column-2">68,5</td><td class="column-3">70,3</td>
+   </tr>
+   <tr class="row-184">
+      <td class="column-1">02.07.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-185">
+      <td class="column-1">03.07.2019</td><td class="column-2">66,8</td><td class="column-3">68,6</td>
+   </tr>
+   <tr class="row-186">
+      <td class="column-1">04.07.2019</td><td class="column-2">66,5</td><td class="column-3">68,3</td>
+   </tr>
+   <tr class="row-187">
+      <td class="column-1">05.07.2019</td><td class="column-2">66,6</td><td class="column-3">68,4</td>
+   </tr>
+   <tr class="row-188">
+      <td class="column-1">06.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-189">
+      <td class="column-1">07.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-190">
+      <td class="column-1">08.07.2019</td><td class="column-2">67,1</td><td class="column-3">68,9</td>
+   </tr>
+   <tr class="row-191">
+      <td class="column-1">09.07.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-192">
+      <td class="column-1">10.07.2019</td><td class="column-2">68,8</td><td class="column-3">70,6</td>
+   </tr>
+   <tr class="row-193">
+      <td class="column-1">11.07.2019</td><td class="column-2">70</td><td class="column-3">71,8</td>
+   </tr>
+   <tr class="row-194">
+      <td class="column-1">12.07.2019</td><td class="column-2">69,7</td><td class="column-3">71,5</td>
+   </tr>
+   <tr class="row-195">
+      <td class="column-1">13.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-196">
+      <td class="column-1">14.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-197">
+      <td class="column-1">15.07.2019</td><td class="column-2">69,2</td><td class="column-3">71</td>
+   </tr>
+   <tr class="row-198">
+      <td class="column-1">16.07.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-199">
+      <td class="column-1">17.07.2019</td><td class="column-2">67,4</td><td class="column-3">69,2</td>
+   </tr>
+   <tr class="row-200">
+      <td class="column-1">18.07.2019</td><td class="column-2">67,2</td><td class="column-3">69</td>
+   </tr>
+   <tr class="row-201">
+      <td class="column-1">19.07.2019</td><td class="column-2">66,9</td><td class="column-3">68,7</td>
+   </tr>
+   <tr class="row-202">
+      <td class="column-1">20.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-203">
+      <td class="column-1">21.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-204">
+      <td class="column-1">22.07.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-205">
+      <td class="column-1">23.07.2019</td><td class="column-2">67,9</td><td class="column-3">69,7</td>
+   </tr>
+   <tr class="row-206">
+      <td class="column-1">24.07.2019</td><td class="column-2">68,5</td><td class="column-3">70,3</td>
+   </tr>
+   <tr class="row-207">
+      <td class="column-1">25.07.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-208">
+      <td class="column-1">26.07.2019</td><td class="column-2">67,9</td><td class="column-3">69,7</td>
+   </tr>
+   <tr class="row-209">
+      <td class="column-1">27.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-210">
+      <td class="column-1">28.07.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-211">
+      <td class="column-1">29.07.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-212">
+      <td class="column-1">30.07.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-213">
+      <td class="column-1">31.07.2019</td><td class="column-2">69</td><td class="column-3">70,8</td>
+   </tr>
+   <tr class="row-214">
+      <td class="column-1">01.08.2019</td><td class="column-2">69,1</td><td class="column-3">70,9</td>
+   </tr>
+   <tr class="row-215">
+      <td class="column-1">02.08.2019</td><td class="column-2">67,5</td><td class="column-3">69,3</td>
+   </tr>
+   <tr class="row-216">
+      <td class="column-1">03.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-217">
+      <td class="column-1">04.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-218">
+      <td class="column-1">05.08.2019</td><td class="column-2">66,5</td><td class="column-3">68,3</td>
+   </tr>
+   <tr class="row-219">
+      <td class="column-1">06.08.2019</td><td class="column-2">65,8</td><td class="column-3">67,6</td>
+   </tr>
+   <tr class="row-220">
+      <td class="column-1">07.08.2019</td><td class="column-2">65,1</td><td class="column-3">66,9</td>
+   </tr>
+   <tr class="row-221">
+      <td class="column-1">08.08.2019</td><td class="column-2">63,9</td><td class="column-3">65,7</td>
+   </tr>
+   <tr class="row-222">
+      <td class="column-1">09.08.2019</td><td class="column-2">64,6</td><td class="column-3">66,4</td>
+   </tr>
+   <tr class="row-223">
+      <td class="column-1">10.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-224">
+      <td class="column-1">11.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-225">
+      <td class="column-1">12.08.2019</td><td class="column-2">65,2</td><td class="column-3">67</td>
+   </tr>
+   <tr class="row-226">
+      <td class="column-1">13.08.2019</td><td class="column-2">65,3</td><td class="column-3">67,1</td>
+   </tr>
+   <tr class="row-227">
+      <td class="column-1">14.08.2019</td><td class="column-2">67,2</td><td class="column-3">69</td>
+   </tr>
+   <tr class="row-228">
+      <td class="column-1">15.08.2019</td><td class="column-2">65,9</td><td class="column-3">67,7</td>
+   </tr>
+   <tr class="row-229">
+      <td class="column-1">16.08.2019</td><td class="column-2">66,1</td><td class="column-3">67,9</td>
+   </tr>
+   <tr class="row-230">
+      <td class="column-1">17.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-231">
+      <td class="column-1">18.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-232">
+      <td class="column-1">19.08.2019</td><td class="column-2">66,2</td><td class="column-3">68</td>
+   </tr>
+   <tr class="row-233">
+      <td class="column-1">20.08.2019</td><td class="column-2">65,1</td><td class="column-3">66,9</td>
+   </tr>
+   <tr class="row-234">
+      <td class="column-1">21.08.2019</td><td class="column-2">66,4</td><td class="column-3">68,2</td>
+   </tr>
+   <tr class="row-235">
+      <td class="column-1">22.08.2019</td><td class="column-2">66,6</td><td class="column-3">68,4</td>
+   </tr>
+   <tr class="row-236">
+      <td class="column-1">23.08.2019</td><td class="column-2">66,9</td><td class="column-3">68,7</td>
+   </tr>
+   <tr class="row-237">
+      <td class="column-1">24.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-238">
+      <td class="column-1">25.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-239">
+      <td class="column-1">26.08.2019</td><td class="column-2">66</td><td class="column-3">67,8</td>
+   </tr>
+   <tr class="row-240">
+      <td class="column-1">27.08.2019</td><td class="column-2">65,9</td><td class="column-3">67,7</td>
+   </tr>
+   <tr class="row-241">
+      <td class="column-1">28.08.2019</td><td class="column-2">66</td><td class="column-3">67,8</td>
+   </tr>
+   <tr class="row-242">
+      <td class="column-1">29.08.2019</td><td class="column-2">66,5</td><td class="column-3">68,3</td>
+   </tr>
+   <tr class="row-243">
+      <td class="column-1">30.08.2019</td><td class="column-2">67</td><td class="column-3">68,8</td>
+   </tr>
+   <tr class="row-244">
+      <td class="column-1">31.08.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-245">
+      <td class="column-1">01.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-246">
+      <td class="column-1">02.09.2019</td><td class="column-2">66,9</td><td class="column-3">68,7</td>
+   </tr>
+   <tr class="row-247">
+      <td class="column-1">03.09.2019</td><td class="column-2">66,2</td><td class="column-3">68</td>
+   </tr>
+   <tr class="row-248">
+      <td class="column-1">04.09.2019</td><td class="column-2">66,4</td><td class="column-3">68,2</td>
+   </tr>
+   <tr class="row-249">
+      <td class="column-1">05.09.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-250">
+      <td class="column-1">06.09.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-251">
+      <td class="column-1">07.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-252">
+      <td class="column-1">08.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-253">
+      <td class="column-1">09.09.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-254">
+      <td class="column-1">10.09.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-255">
+      <td class="column-1">11.09.2019</td><td class="column-2">69,1</td><td class="column-3">70,9</td>
+   </tr>
+   <tr class="row-256">
+      <td class="column-1">12.09.2019</td><td class="column-2">67,1</td><td class="column-3">68,9</td>
+   </tr>
+   <tr class="row-257">
+      <td class="column-1">13.09.2019</td><td class="column-2">66,9</td><td class="column-3">68,7</td>
+   </tr>
+   <tr class="row-258">
+      <td class="column-1">14.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-259">
+      <td class="column-1">15.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-260">
+      <td class="column-1">16.09.2019</td><td class="column-2">72,4</td><td class="column-3">74,2</td>
+   </tr>
+   <tr class="row-261">
+      <td class="column-1">17.09.2019</td><td class="column-2">73,7</td><td class="column-3">75,5</td>
+   </tr>
+   <tr class="row-262">
+      <td class="column-1">18.09.2019</td><td class="column-2">70,7</td><td class="column-3">72,5</td>
+   </tr>
+   <tr class="row-263">
+      <td class="column-1">19.09.2019</td><td class="column-2">70,5</td><td class="column-3">72,3</td>
+   </tr>
+   <tr class="row-264">
+      <td class="column-1">20.09.2019</td><td class="column-2">72,2</td><td class="column-3">74</td>
+   </tr>
+   <tr class="row-265">
+      <td class="column-1">21.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-266">
+      <td class="column-1">22.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-267">
+      <td class="column-1">23.09.2019</td><td class="column-2">70,8</td><td class="column-3">72,6</td>
+   </tr>
+   <tr class="row-268">
+      <td class="column-1">24.09.2019</td><td class="column-2">70,3</td><td class="column-3">72,1</td>
+   </tr>
+   <tr class="row-269">
+      <td class="column-1">25.09.2019</td><td class="column-2">69,3</td><td class="column-3">71,1</td>
+   </tr>
+   <tr class="row-270">
+      <td class="column-1">26.09.2019</td><td class="column-2">70,1</td><td class="column-3">71,9</td>
+   </tr>
+   <tr class="row-271">
+      <td class="column-1">27.09.2019</td><td class="column-2">70,1</td><td class="column-3">71,9</td>
+   </tr>
+   <tr class="row-272">
+      <td class="column-1">28.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-273">
+      <td class="column-1">29.09.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-274">
+      <td class="column-1">30.09.2019</td><td class="column-2">69,5</td><td class="column-3">71,3</td>
+   </tr>
+   <tr class="row-275">
+      <td class="column-1">01.10.2019</td><td class="column-2">69,2</td><td class="column-3">71</td>
+   </tr>
+   <tr class="row-276">
+      <td class="column-1">02.10.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-277">
+      <td class="column-1">03.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-278">
+      <td class="column-1">04.10.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-279">
+      <td class="column-1">05.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-280">
+      <td class="column-1">06.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-281">
+      <td class="column-1">07.10.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-282">
+      <td class="column-1">08.10.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-283">
+      <td class="column-1">09.10.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-284">
+      <td class="column-1">10.10.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-285">
+      <td class="column-1">11.10.2019</td><td class="column-2">69,3</td><td class="column-3">71,1</td>
+   </tr>
+   <tr class="row-286">
+      <td class="column-1">12.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-287">
+      <td class="column-1">13.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-288">
+      <td class="column-1">14.10.2019</td><td class="column-2">69,1</td><td class="column-3">70,9</td>
+   </tr>
+   <tr class="row-289">
+      <td class="column-1">15.10.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-290">
+      <td class="column-1">16.10.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-291">
+      <td class="column-1">17.10.2019</td><td class="column-2">68,4</td><td class="column-3">70,2</td>
+   </tr>
+   <tr class="row-292">
+      <td class="column-1">18.10.2019</td><td class="column-2">68,4</td><td class="column-3">70,2</td>
+   </tr>
+   <tr class="row-293">
+      <td class="column-1">19.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-294">
+      <td class="column-1">20.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-295">
+      <td class="column-1">21.10.2019</td><td class="column-2">68,8</td><td class="column-3">70,6</td>
+   </tr>
+   <tr class="row-296">
+      <td class="column-1">22.10.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-297">
+      <td class="column-1">23.10.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-298">
+      <td class="column-1">24.10.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-299">
+      <td class="column-1">25.10.2019</td><td class="column-2">68,8</td><td class="column-3">70,6</td>
+   </tr>
+   <tr class="row-300">
+      <td class="column-1">26.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-301">
+      <td class="column-1">27.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-302">
+      <td class="column-1">28.10.2019</td><td class="column-2">68,5</td><td class="column-3">70,3</td>
+   </tr>
+   <tr class="row-303">
+      <td class="column-1">29.10.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-304">
+      <td class="column-1">30.10.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-305">
+      <td class="column-1">31.10.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-306">
+      <td class="column-1">01.11.2019</td><td class="column-2">66,4</td><td class="column-3">68,2</td>
+   </tr>
+   <tr class="row-307">
+      <td class="column-1">02.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-308">
+      <td class="column-1">03.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-309">
+      <td class="column-1">04.11.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-310">
+      <td class="column-1">05.11.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-311">
+      <td class="column-1">06.11.2019</td><td class="column-2">67,85</td><td class="column-3">69,65</td>
+   </tr>
+   <tr class="row-312">
+      <td class="column-1">07.11.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-313">
+      <td class="column-1">08.11.2019</td><td class="column-2">66,5</td><td class="column-3">68,3</td>
+   </tr>
+   <tr class="row-314">
+      <td class="column-1">09.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-315">
+      <td class="column-1">10.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-316">
+      <td class="column-1">11.11.2019</td><td class="column-2">67</td><td class="column-3">68,8</td>
+   </tr>
+   <tr class="row-317">
+      <td class="column-1">12.11.2019</td><td class="column-2">67,5</td><td class="column-3">69,3</td>
+   </tr>
+   <tr class="row-318">
+      <td class="column-1">13.11.2019</td><td class="column-2">66,4</td><td class="column-3">68,2</td>
+   </tr>
+   <tr class="row-319">
+      <td class="column-1">14.11.2019</td><td class="column-2">67,9</td><td class="column-3">69,7</td>
+   </tr>
+   <tr class="row-320">
+      <td class="column-1">15.11.2019</td><td class="column-2">67,4</td><td class="column-3">69,2</td>
+   </tr>
+   <tr class="row-321">
+      <td class="column-1">16.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-322">
+      <td class="column-1">17.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-323">
+      <td class="column-1">18.11.2019</td><td class="column-2">67,9</td><td class="column-3">69,7</td>
+   </tr>
+   <tr class="row-324">
+      <td class="column-1">19.11.2019</td><td class="column-2">66,8</td><td class="column-3">68,6</td>
+   </tr>
+   <tr class="row-325">
+      <td class="column-1">20.11.2019</td><td class="column-2">66,3</td><td class="column-3">68,1</td>
+   </tr>
+   <tr class="row-326">
+      <td class="column-1">21.11.2019</td><td class="column-2">66,6</td><td class="column-3">68,4</td>
+   </tr>
+   <tr class="row-327">
+      <td class="column-1">22.11.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-328">
+      <td class="column-1">23.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-329">
+      <td class="column-1">24.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-330">
+      <td class="column-1">25.11.2019</td><td class="column-2">67,7</td><td class="column-3">69,5</td>
+   </tr>
+   <tr class="row-331">
+      <td class="column-1">26.11.2019</td><td class="column-2">68,1</td><td class="column-3">69,9</td>
+   </tr>
+   <tr class="row-332">
+      <td class="column-1">27.11.2019</td><td class="column-2">68,6</td><td class="column-3">70,4</td>
+   </tr>
+   <tr class="row-333">
+      <td class="column-1">28.11.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-334">
+      <td class="column-1">29.11.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-335">
+      <td class="column-1">30.11.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-336">
+      <td class="column-1">01.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-337">
+      <td class="column-1">02.12.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-338">
+      <td class="column-1">03.12.2019</td><td class="column-2">66,8</td><td class="column-3">68,6</td>
+   </tr>
+   <tr class="row-339">
+      <td class="column-1">04.12.2019</td><td class="column-2">67,1</td><td class="column-3">68,9</td>
+   </tr>
+   <tr class="row-340">
+      <td class="column-1">05.12.2019</td><td class="column-2">67,6</td><td class="column-3">69,4</td>
+   </tr>
+   <tr class="row-341">
+      <td class="column-1">06.12.2019</td><td class="column-2">67,95</td><td class="column-3">69,75</td>
+   </tr>
+   <tr class="row-342">
+      <td class="column-1">07.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-343">
+      <td class="column-1">08.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-344">
+      <td class="column-1">09.12.2019</td><td class="column-2">68,4</td><td class="column-3">70,2</td>
+   </tr>
+   <tr class="row-345">
+      <td class="column-1">10.12.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-346">
+      <td class="column-1">11.12.2019</td><td class="column-2">68,2</td><td class="column-3">70</td>
+   </tr>
+   <tr class="row-347">
+      <td class="column-1">12.12.2019</td><td class="column-2">67,8</td><td class="column-3">69,6</td>
+   </tr>
+   <tr class="row-348">
+      <td class="column-1">13.12.2019</td><td class="column-2">68,3</td><td class="column-3">70,1</td>
+   </tr>
+   <tr class="row-349">
+      <td class="column-1">14.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-350">
+      <td class="column-1">15.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-351">
+      <td class="column-1">16.12.2019</td><td class="column-2">69,4</td><td class="column-3">71,2</td>
+   </tr>
+   <tr class="row-352">
+      <td class="column-1">17.12.2019</td><td class="column-2">69,4</td><td class="column-3">71,2</td>
+   </tr>
+   <tr class="row-353">
+      <td class="column-1">18.12.2019</td><td class="column-2">69,9</td><td class="column-3">71,7</td>
+   </tr>
+   <tr class="row-354">
+      <td class="column-1">19.12.2019</td><td class="column-2">69,6</td><td class="column-3">71,4</td>
+   </tr>
+   <tr class="row-355">
+      <td class="column-1">20.12.2019</td><td class="column-2">70</td><td class="column-3">71,8</td>
+   </tr>
+   <tr class="row-356">
+      <td class="column-1">21.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-357">
+      <td class="column-1">22.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-358">
+      <td class="column-1">23.12.2019</td><td class="column-2">69,8</td><td class="column-3">71,6</td>
+   </tr>
+   <tr class="row-359">
+      <td class="column-1">24.12.2019</td><td class="column-2"></td><td class="column-3">1,8</td>
+   </tr>
+   <tr class="row-360">
+      <td class="column-1">25.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-361">
+      <td class="column-1">26.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-362">
+      <td class="column-1">27.12.2019</td><td class="column-2">71</td><td class="column-3">72,8</td>
+   </tr>
+   <tr class="row-363">
+      <td class="column-1">28.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-364">
+      <td class="column-1">29.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-365">
+      <td class="column-1">30.12.2019</td><td class="column-2">70,6</td><td class="column-3">72,4</td>
+   </tr>
+   <tr class="row-366">
+      <td class="column-1">31.12.2019</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-367">
+      <td class="column-1">01.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-368">
+      <td class="column-1">02.01.2020</td><td class="column-2">54,3</td><td class="column-3">56,1</td>
+   </tr>
+   <tr class="row-369">
+      <td class="column-1">03.01.2020</td><td class="column-2">55,8</td><td class="column-3">57,6</td>
+   </tr>
+   <tr class="row-370">
+      <td class="column-1">04.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-371">
+      <td class="column-1">05.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-372">
+      <td class="column-1">06.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-373">
+      <td class="column-1">07.01.2020</td><td class="column-2">54,5</td><td class="column-3">56,3</td>
+   </tr>
+   <tr class="row-374">
+      <td class="column-1">08.01.2020</td><td class="column-2">55,1</td><td class="column-3">56,9</td>
+   </tr>
+   <tr class="row-375">
+      <td class="column-1">09.01.2020</td><td class="column-2">53,4</td><td class="column-3">55,2</td>
+   </tr>
+   <tr class="row-376">
+      <td class="column-1">10.01.2020</td><td class="column-2">53,2</td><td class="column-3">55</td>
+   </tr>
+   <tr class="row-377">
+      <td class="column-1">11.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-378">
+      <td class="column-1">12.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-379">
+      <td class="column-1">13.01.2020</td><td class="column-2">52,7</td><td class="column-3">54,5</td>
+   </tr>
+   <tr class="row-380">
+      <td class="column-1">14.01.2020</td><td class="column-2">51,4</td><td class="column-3">53,2</td>
+   </tr>
+   <tr class="row-381">
+      <td class="column-1">15.01.2020</td><td class="column-2">51,65</td><td class="column-3">53,45</td>
+   </tr>
+   <tr class="row-382">
+      <td class="column-1">16.01.2020</td><td class="column-2">51,25</td><td class="column-3">51</td>
+   </tr>
+   <tr class="row-383">
+      <td class="column-1">17.01.2020</td><td class="column-2">51,4</td><td class="column-3">53,2</td>
+   </tr>
+   <tr class="row-384">
+      <td class="column-1">18.01.2020</td><td class="column-2">51,25</td><td class="column-3">51,2</td>
+   </tr>
+   <tr class="row-385">
+      <td class="column-1">19.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   <tr class="row-386">
+      <td class="column-1">20.01.2020</td><td class="column-2"></td><td class="column-3"></td>
+   </tr>
+   </tbody>
+</table>
+</body>
+</html>
